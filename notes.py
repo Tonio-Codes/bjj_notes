@@ -4,7 +4,7 @@ class notes:
     __db_path = ""
 
     def __init__(self):
-        self.connection = sqlite3.connect("bjj_notes.db")
+        self.connection = sqlite3.connect("bjj_notes.db",check_same_thread=False)
         self.cursor = self.connection.cursor()
         self.create_db()
     
@@ -46,7 +46,7 @@ class notes:
                 notes = self.cursor.execute("""SELECT name, date, note
                                 FROM notes 
                                 WHERE
-                                name = ?""", name)
+                                name = (?)""", (name,))
             return notes.fetchall()
         except sqlite3.IntegrityError as e:
             print("error getting notes for that user ", e)
@@ -58,6 +58,12 @@ class notes:
 
 def main():
     notes_db = notes()
+    #notes_db.insert("Anthony","5/21/2025","go to the store")
+    #notes_db.insert("Anthony","5/21/2025","pick up easton")
+    #notes_db.insert("Anthony","5/21/2025","go teach kids class")
+    #notes_db.insert("Anthony","5/21/2025","clean room")
+    #notes_db.insert("Anthony","5/23/2025","go to 2nd st with friends :)")
+    print(notes_db.get_notes("Anthony"))
 
 if __name__ == "__main__":
     main()

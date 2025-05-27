@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify, url_for, redirect, render_template
-import notes
+from notes import notes
 
 
 app = Flask(__name__)
+notes_db = notes()
 
 @app.route("/",methods=["POST","GET"])
 def hello_world():
@@ -11,17 +12,16 @@ def hello_world():
     else:
         return render_template("landing.html")
 
-@app.route("/api/<user>",defaults={"date": None})
-@app.route("/api/<user>/<date>", methods=["GET"])
+@app.route("/api/<user>",defaults={"date": None},methods=["GET","POST"])
+@app.route("/api/<user>/<date>", methods=["GET","POST"])
 def get_notes(user,date):
     if request.method == "GET":
-        notes = get_notes(user,date)
-        return jsonify(notes)
+        return notes_db.get_notes(user,date)
 
 @app.route("/notes",methods=["POST","GET"])
 def render_notes():
     if request.method == "GET":
-        return render_template("notes_page.html")
+         return render_template("notes_page.html")
         
 
 
