@@ -27,7 +27,7 @@ class notes:
         except sqlite3.IntegrityError as e:
             print("error adding entry",e)
     
-    def delete(self, name:str, date:str):
+    def delete(self, name:str, date:str = None):
         try:
             self.cursor.execute("""DELTE FROM notes
                                 WHERE
